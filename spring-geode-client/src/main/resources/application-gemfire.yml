@@ -1,0 +1,8 @@
+spring:
+    data:
+      gemfire:
+        cache:
+          log-level: DEBUG
+          name: client1
+        pool:
+           pool2: localhost[31431]

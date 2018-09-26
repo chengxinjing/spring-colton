@@ -1,0 +1,5 @@
+spring:
+  data:
+    gemfire:
+      cache:
+        log-level: INFO
