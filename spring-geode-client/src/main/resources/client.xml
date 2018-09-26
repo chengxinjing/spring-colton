@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:gfe="http://www.springframework.org/schema/geode"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/geode http://www.springframework.org/schema/geode/spring-geode.xsd">
+  <gfe:client-cache id="clientCache" pool-name="pool1" />
+   <gfe:pool id="pool1" subscription-enabled="true">
+       <gfe:locator port="31431" host="localhost"/>
+   </gfe:pool>
+    <gfe:client-region id="PRICE_CACHE" cache-ref="clientCache" pool-name="pool1" shortcut="PROXY"/>
+    <gfe:client-region id="CUSTOMER_CACHE" cache-ref="clientCache" pool-name="pool1" shortcut="PROXY"/>
+    <gfe:client-region id="CHENG_CACHE" cache-ref="clientCache" pool-name="pool1" shortcut="PROXY"/>
+
+</beans>
