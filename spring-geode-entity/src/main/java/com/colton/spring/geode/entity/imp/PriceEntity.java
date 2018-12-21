@@ -2,6 +2,8 @@ package com.colton.spring.geode.entity.imp;
 
 import com.colton.spring.geode.entity.interfaces.Price;
 import org.apache.geode.DataSerializer;
+import org.apache.geode.pdx.PdxReader;
+import org.apache.geode.pdx.PdxWriter;
 import org.springframework.data.gemfire.expiration.TimeToLiveExpiration;
 import org.springframework.data.gemfire.mapping.annotation.ClientRegion;
 import org.springframework.data.gemfire.mapping.annotation.Region;
@@ -9,7 +11,6 @@ import org.springframework.data.gemfire.mapping.annotation.Region;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-@Region("PRICE_CACHE")
 @TimeToLiveExpiration(timeout = "6000")
 public class PriceEntity implements Price {
     private String key;
@@ -41,17 +42,6 @@ public class PriceEntity implements Price {
         this.cusip = cusip;
     }
 
-    public void toData(DataOutput dataOutput) throws IOException {
-        DataSerializer.writeString(key, dataOutput);
-        DataSerializer.writeString(cusip, dataOutput);
-        DataSerializer.writeDouble(cleanPrice, dataOutput);
-    }
-
-    public void fromData(DataInput dataInput) throws IOException, ClassNotFoundException {
-        this.key = DataSerializer.readString(dataInput);
-        this.cusip = DataSerializer.readString(dataInput);
-        this.cleanPrice = DataSerializer.readDouble(dataInput);
-    }
 
     @Override
     public String toString() {
@@ -60,5 +50,19 @@ public class PriceEntity implements Price {
                 ", cleanPrice=" + cleanPrice +
                 ", cusip='" + cusip + '\'' +
                 '}';
+    }
+
+    @Override
+    public void toData(PdxWriter writer) {
+        writer.writeString("key",this.key);
+        writer.writeString("cusip",this.cusip);
+        writer.writeDouble("cleanPrice",this.cleanPrice);
+    }
+
+    @Override
+    public void fromData(PdxReader reader) {
+        this.key=reader.readString("key");
+        this.cleanPrice=reader.readDouble("cleanPrice");
+        this.cusip=reader.readString("cusip");
     }
 }

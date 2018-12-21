@@ -6,13 +6,11 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.springframework.org/schema/geode http://www.springframework.org/schema/geode/spring-geode.xsd
 http://www.springframework.org/schema/data/geode http://www.springframework.org/schema/data/geode/spring-data-geode.xsd">
-  <gfe:replicated-region id="PRICE_CACHE" name="PRICE_CACHE" scope="DISTRIBUTED_ACK" >
-     <gfe:cache-listener ref="priceCacheListener"/>
-  </gfe:replicated-region>
-    <gfe:replicated-region id="CUSTOMER_CACHE" name="CUSTOMER_CACHE" />
-    <gfe:function-service id="functionService" >
-        <gfe:function ref="priceFunctionService"/>
-
-    </gfe:function-service>
+  <gfe:cache id="server_cache" />
+  <gfe:partitioned-region id="PRICE" copies="1" name="PRICE" cache-ref="server_cache" local-max-memory="6" load-factor="0.8" >
+      <gfe:cache-listener ref="priceCacheListener"/>
+      <gfe:cache-loader ref="priceCacheLoader"/>
+      <gfe:cache-writer ref="priceCacheWriter"/>
+  </gfe:partitioned-region>
 
 </beans>

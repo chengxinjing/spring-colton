@@ -8,8 +8,5 @@ http://www.springframework.org/schema/geode http://www.springframework.org/schem
    <gfe:pool id="pool1" subscription-enabled="true">
        <gfe:locator port="31431" host="localhost"/>
    </gfe:pool>
-    <gfe:client-region id="PRICE_CACHE" cache-ref="clientCache" pool-name="pool1" shortcut="PROXY"/>
-    <gfe:client-region id="CUSTOMER_CACHE" cache-ref="clientCache" pool-name="pool1" shortcut="PROXY"/>
-    <gfe:client-region id="CHENG_CACHE" cache-ref="clientCache" pool-name="pool1" shortcut="PROXY"/>
-
+    <gfe:client-region id="PRICE" cache-ref="clientCache"  shortcut="CACHING_PROXY"/>
 </beans>
