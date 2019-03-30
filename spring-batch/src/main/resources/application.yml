@@ -4,3 +4,5 @@ spring:
     password: jianai1314520
     username: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+  profiles:
+    active: filePath

@@ -1,6 +1,6 @@
 package batch.jobs;
 
-import batch.entity.Price;
+import batch.entity.PriceEntity;
 import batch.mapper.PriceItemMapper;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
@@ -22,8 +22,8 @@ public class ReaderConfiguartion {
     @Bean("PRICE_READER")
     @Scope("prototype")
     @Lazy
-    public FlatFileItemReader<?> priceReader(@Qualifier("PRICE_MAPPER") PriceItemMapper priceItemMapper) {
-        FlatFileItemReader<Price> reader = new FlatFileItemReader<>();
+    public FlatFileItemReader<PriceEntity> priceReader(@Qualifier("PRICE_MAPPER") PriceItemMapper priceItemMapper) {
+        FlatFileItemReader<PriceEntity> reader = new FlatFileItemReader<>();
         reader.setResource(new FileSystemResource(inputFile.getInputFileName()));
         DefaultLineMapper mapper = new DefaultLineMapper();
         mapper.setFieldSetMapper(priceItemMapper);

@@ -1,6 +1,6 @@
 package batch.entity;
 
-public class Price {
+public class PriceEntity {
     private String name;
     private int price;
 
@@ -10,7 +10,7 @@ public class Price {
 
     @Override
     public String toString() {
-        return "Price{" +
+        return "PriceEntity{" +
                 "name='" + name + '\'' +
                 ", price=" + price +
                 '}';

@@ -1,20 +1,19 @@
 package batch.mapper;
 
-import batch.entity.Price;
+import batch.entity.PriceEntity;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
 
-public class PriceItemMapper implements FieldSetMapper<Price> {
+public class PriceItemMapper implements FieldSetMapper<PriceEntity> {
 
-    public Price mapFieldSet(FieldSet fieldSet) throws BindException {
-        Price price = new Price();
+    public PriceEntity mapFieldSet(FieldSet fieldSet) throws BindException {
+        PriceEntity priceEntity = new PriceEntity();
         if (fieldSet.readString(0).equals("quit")) {
-            System.err.print("quit");
             throw new BindException("quit", "quit");
         }
-        price.setName(fieldSet.readString(0));
-        price.setPrice(fieldSet.readInt(1));
-        return price;
+        priceEntity.setName(fieldSet.readString(0));
+        priceEntity.setPrice(fieldSet.readInt(1));
+        return priceEntity;
     }
 }

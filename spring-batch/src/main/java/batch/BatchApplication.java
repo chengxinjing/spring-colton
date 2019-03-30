@@ -14,14 +14,5 @@ public class BatchApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BatchApplication.class);
-      /*  System.setProperty("InputFileName","F:\\colton\\spring-batch\\src\\main\\resources\\test.data");
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(BatchApplication.class);
-        Job job = context.getBean("PRICE_JOB",Job.class);
-        //job.PriceJob();
-        System.setProperty("InputFileName","F:\\colton\\spring-batch\\src\\main\\resources\\test1.data");
-        System.out.println("----------------------------");
-      context.getBean("PRICE_JOB",Job.class);*/
-
-        // job.PriceJob();
     }
 }

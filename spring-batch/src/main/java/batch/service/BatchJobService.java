@@ -1,5 +1,7 @@
 package batch.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
@@ -8,6 +10,7 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
@@ -20,14 +23,16 @@ import java.util.Map;
 
 @Service
 public class BatchJobService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BatchJobService.class);
     @Autowired
     private JobLauncher jobLauncher;
 
     @Autowired
     ApplicationContext applicationContext;
 
+    @Value("${test.data.url}")
+    private String path;
     public int runJob(String jobName, String feed) {
-        String path = "F:\\colton\\spring-batch\\src\\main\\resources\\";
         String suffix = ".data";
         String abPath = path + feed + suffix;
         System.setProperty("InputFileName", abPath);
@@ -38,13 +43,17 @@ public class BatchJobService {
         try {
             jobLauncher.run((Job) applicationContext.getBean(jobName), new JobParameters(jobParameterMap));
         } catch (JobExecutionAlreadyRunningException e) {
+            LOGGER.info("job already running");
+            LOGGER.info(e.getMessage(), e);
 
         } catch (JobRestartException e) {
-
+            LOGGER.info("job can't restart");
+            LOGGER.info(e.getMessage(), e);
         } catch (JobInstanceAlreadyCompleteException e) {
-
+            LOGGER.info("job already complete");
+            LOGGER.info(e.getMessage(), e);
         } catch (Exception e) {
-
+            LOGGER.info(e.getMessage(), e);
         }
 
         return 0;
@@ -63,7 +72,7 @@ public class BatchJobService {
             BigInteger integer = new BigInteger(1, md.digest());
             md5 = integer.toString(16);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.info(e.getMessage(), e);
         }
         return md5;
     }

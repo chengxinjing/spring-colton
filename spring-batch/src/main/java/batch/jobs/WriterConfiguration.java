@@ -1,6 +1,6 @@
 package batch.jobs;
 
-import batch.writer.PriceitemWriter;
+import batch.writer.PriceItemWriter;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +11,6 @@ public class WriterConfiguration {
     @Bean("PRICE_WRITER")
     @Lazy
     public ItemWriter priceWriter() {
-        return new PriceitemWriter();
+        return new PriceItemWriter();
     }
 }

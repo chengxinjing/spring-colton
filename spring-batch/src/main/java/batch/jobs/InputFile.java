@@ -6,7 +6,6 @@ import org.springframework.util.StringUtils;
 @Component("inputFile")
 public class InputFile {
     public String getInputFileName() {
-        System.out.println(System.getProperty("InputFileName"));
         return StringUtils.isEmpty(System.getProperty("InputFileName")) ? "" : System.getProperty("InputFileName");
     }
 }
