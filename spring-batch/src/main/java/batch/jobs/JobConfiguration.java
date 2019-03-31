@@ -11,8 +11,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 
 @Configuration
-
-//@Import(value = {StepConfiguation.class})
 public class JobConfiguration {
     @Autowired
     private JobBuilderFactory jobBuilderFactory;

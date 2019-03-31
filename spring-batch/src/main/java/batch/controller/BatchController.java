@@ -1,9 +1,11 @@
 package batch.controller;
 
+import batch.entity.BatchJobRequestBody;
 import batch.service.BatchJobService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,9 +15,9 @@ public class BatchController {
     @Autowired
     private BatchJobService batchJobService;
 
-    @GetMapping("/job/{jobName}/{feed}")
-    public int runJob(@PathVariable("jobName") String jobName, @PathVariable("feed") String feed) {
+    @PostMapping(value = "/job", produces = MediaType.APPLICATION_JSON_VALUE)
+    public int runJob(@RequestBody BatchJobRequestBody requstBody) {
 
-        return batchJobService.runJob(jobName, feed);
+        return batchJobService.runJob(requstBody.getJobId(), requstBody.getFeedFile());
     }
 }

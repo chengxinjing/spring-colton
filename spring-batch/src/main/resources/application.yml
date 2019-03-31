@@ -1,8 +1,10 @@
 spring:
   datasource:
-    url: jdbc:mysql://192.168.1.110:3306/test?serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://192.168.1.110:3306/batch?serverTimezone=Asia/Shanghai
     password: jianai1314520
     username: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  profiles:
-    active: filePath
+    data: classpath:data-delete.sql
+    initialization-mode: always
+  batch:
+    job:
+      enabled: false

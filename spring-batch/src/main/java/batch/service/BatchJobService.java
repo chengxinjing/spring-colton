@@ -2,15 +2,12 @@ package batch.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameter;
-import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
@@ -30,33 +27,51 @@ public class BatchJobService {
     @Autowired
     ApplicationContext applicationContext;
 
-    @Value("${test.data.url}")
-    private String path;
-    public int runJob(String jobName, String feed) {
-        String suffix = ".data";
-        String abPath = path + feed + suffix;
-        System.setProperty("InputFileName", abPath);
-        String md5 = computeFileMD5(abPath);
+    public int runJob(String jobName, String feedFile) {
+        int rtCode = 0;
+        System.setProperty("InputFileName", feedFile);
+        String md5 = computeFileMD5(feedFile);
         Map<String, JobParameter> jobParameterMap = new LinkedHashMap<>();
         JobParameter jobParameter = new JobParameter(md5);
         jobParameterMap.put(jobName, jobParameter);
         try {
-            jobLauncher.run((Job) applicationContext.getBean(jobName), new JobParameters(jobParameterMap));
+            JobExecution jobExecution = jobLauncher.run((Job) applicationContext.getBean(jobName), new JobParameters(jobParameterMap));
+            rtCode = getRtCode(jobExecution);
         } catch (JobExecutionAlreadyRunningException e) {
+            rtCode = 1;
             LOGGER.info("job already running");
             LOGGER.info(e.getMessage(), e);
-
+            return rtCode;
         } catch (JobRestartException e) {
             LOGGER.info("job can't restart");
             LOGGER.info(e.getMessage(), e);
         } catch (JobInstanceAlreadyCompleteException e) {
+            rtCode = 0;
             LOGGER.info("job already complete");
             LOGGER.info(e.getMessage(), e);
+            return rtCode;
         } catch (Exception e) {
+            rtCode = 3;
             LOGGER.info(e.getMessage(), e);
         }
+        return rtCode;
+    }
 
-        return 0;
+    private int getRtCode(JobExecution jobExecution) {
+        ExitStatus status = jobExecution.getExitStatus();
+        int rtCode = 0;
+        if (ExitStatus.COMPLETED.equals(status)) {
+            rtCode = 0;
+        } else if (ExitStatus.EXECUTING.equals(status)) {
+            rtCode = 1;
+        } else if (ExitStatus.NOOP.equals(status)) {
+            rtCode = 2;
+        } else if (ExitStatus.FAILED.equals(status)) {
+            rtCode = 3;
+        } else {
+            rtCode = 4;
+        }
+        return rtCode;
     }
 
     private String computeFileMD5(String filePath) {
